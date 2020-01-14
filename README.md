@@ -4,7 +4,8 @@ SDK and CLI for Aeris connectivity apis
 ## Getting Started - Deployment
 
 OS environments tested so far: 
-* Ubuntu 18/Windows 10
+* Ubuntu 18 on Windows 10
+* Windows 10 cmd shell
 
 Python environments tested so far:
 * Python 3.7.5 / pip 19.3.1
@@ -16,20 +17,25 @@ Installation / upgrade:
 
 Run:
 ~~~
-'aeriscli' (Runs this way because aericli script gets installed in python/bin directory)
+'aeriscli' (Runs this way because aericli script gets installed in python/bin or python/scripts directory)
 'python -m aerisapisdk.cli' (Run via module command)
 ~~~
 
 ## Getting Started - Development
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What you need to develop and test.
+
+What I'm using:
 
 ```
-Give examples
+git --version = 2.17.1
+python --version = 3.7.5
+pip --version = 19.3.1
+poetry --version = 1.0.0
 ```
 
 ### Installing
