@@ -132,10 +132,12 @@ tests/test_aerisapisdk.py .                                                     
 
 ### Coding style tests
 
-Explain what these tests test and why
+This project used pycodestyle to ensure adherence to PEP 8 coding style rules.
+
+Running pycodestyle as below should return with no errors.
 
 ```
-Give an example
+>pycodestyle --max-line-length=120 aerisapisdk/
 ```
 
 
