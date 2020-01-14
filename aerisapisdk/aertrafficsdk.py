@@ -10,6 +10,6 @@ def getdevicesummaryreport(accountId, apiKey, email, deviceIdType, deviceId):
     myparams = {'apiKey': apiKey, "durationInMonths": '3', 'subAccounts': 'false'}
     print("Endpoint: " + endpoint)
     print("Params: " + str(myparams))
-    r = requests.get(endpoint, params = myparams)
+    r = requests.get(endpoint, params=myparams)
     print("Response code: " + str(r.status_code))
     print(r.text)
