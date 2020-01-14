@@ -42,19 +42,73 @@ poetry --version = 1.0.0
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Step 1: Clone the source to your local machine
 
 ```
-Give the example
+>git clone https://github.com/aerisiot/aeris-apisdk-py.git
+
+Cloning into 'aeris-apisdk-py'...
+remote: Enumerating objects: 38, done.
+remote: Counting objects: 100% (38/38), done.
+remote: Compressing objects: 100% (36/36), done.
+remote: Total 38 (delta 12), reused 14 (delta 0), pack-reused 0
+Unpacking objects: 100% (38/38), done.
 ```
 
-And repeat
+Step 2: Install dependencies
 
 ```
-until finished
+>cd aeris-apisdk-py
+>poetry update
+
+Updating dependencies
+Resolving dependencies... (0.9s)
+
+Writing lock file
+
+
+Package operations: 18 installs, 0 updates, 0 removals
+
+  - Installing more-itertools (8.1.0)
+  - Installing zipp (1.0.0)
+  - Installing importlib-metadata (1.4.0)
+  - Installing pyparsing (2.4.6)
+  - Installing six (1.13.0)
+  - Installing attrs (19.3.0)
+  - Installing certifi (2019.11.28)
+  - Installing chardet (3.0.4)
+  - Installing idna (2.8)
+  - Installing packaging (20.0)
+  - Installing pluggy (0.13.1)
+  - Installing py (1.8.1)
+  - Installing urllib3 (1.25.7)
+  - Installing wcwidth (0.1.8)
+  - Installing click (7.0)
+  - Installing pathlib (1.0.1)
+  - Installing pytest (5.3.2)
+  - Installing requests (2.22.0)
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+Step 3: Verify development environment working
+
+```
+>poetry run aeriscli
+
+Usage: aeriscli [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -v, --verbose             Verbose output
+  -cfg, --config-file TEXT  Path to aservices config file.
+  --help                    Show this message and exit.
+
+Commands:
+  aeradmin    AerAdmin API Services
+  aerframe    AerFrame API Services
+  aertraffic  AerTraffic API Services
+  config      Set up the configuration for using this tool
+```
+
+
 
 ## Running the tests
 
