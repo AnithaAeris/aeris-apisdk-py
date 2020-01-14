@@ -7,11 +7,11 @@ OS environments tested so far:
 * Ubuntu 18/Windows 10
 
 Python environments tested so far:
-* Pythong 3.7.5 / pip 19.3.1
+* Python 3.7.5 / pip 19.3.1
 
 Installation / upgrade:
-'pip install aerisapisdk'
-'pip install --upgrade aerisapisdk'
+* 'pip install aerisapisdk'
+* 'pip install --upgrade aerisapisdk'
 
 
 Run:
