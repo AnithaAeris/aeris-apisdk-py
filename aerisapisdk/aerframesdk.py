@@ -265,7 +265,8 @@ def getinboundsubscriptions(verbose, accountId, apiKey, appShortName):
 
 
 def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/subscriptions'
+    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+               + appShortName + '/subscriptions'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
@@ -273,7 +274,8 @@ def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
         subscriptions = json.loads(r.text)
         if 'deliveryReceiptSubscription' in subscriptions.keys():
             print('There are outbound (MT-DR) subscriptions.' + json.dumps(subscriptions, indent=4))
-            subscriptionId = subscriptions['deliveryReceiptSubscription'][0]['resourceURL'].split('/subscriptions/', 1)[1]
+            subscriptionId \
+                = subscriptions['deliveryReceiptSubscription'][0]['resourceURL'].split('/subscriptions/', 1)[1]
             print('Subscription ID: ' + subscriptionId)
             return subscriptionId
         else:
@@ -285,7 +287,8 @@ def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
 
 
 def getoutboundsubscription(verbose, accountId, apiKey, appShortName, subscriptionId):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/subscriptions/' + subscriptionId
+    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+               + appShortName + '/subscriptions/' + subscriptionId
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
@@ -298,7 +301,8 @@ def getoutboundsubscription(verbose, accountId, apiKey, appShortName, subscripti
 
 
 def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChannelId):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/subscriptions'
+    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+               + appShortName + '/subscriptions'
     callbackReference = {'callbackData': appShortName + '-mt',
                          'notifyURL': 'https://api.aerframe.aeris.com/notificationchannel/v2/'
                          + accountId + '/channels/' + appChannelId + '/callback'}
@@ -379,7 +383,8 @@ def poll_notification_channel(verbose, accountId, apiKey, channelURL):
 
 
 def getlocation(verbose, accountId, apiKey, deviceIdType, deviceId):
-    endpoint = 'https://api.aerframe.aeris.com/networkservices/v2/' + accountId + '/devices/' + deviceIdType + '/' + deviceId + '/networkLocation'
+    endpoint = 'https://api.aerframe.aeris.com/networkservices/v2/' + accountId + '/devices/' \
+               + deviceIdType + '/' + deviceId + '/networkLocation'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
