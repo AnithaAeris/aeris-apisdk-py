@@ -112,17 +112,25 @@ Commands:
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+This section covers the automated tests for this system
 
-### Break down into end to end tests
+### Functional tests
 
-Explain what these tests test and why
+This project uses pytest for running functional tests
 
 ```
-Give an example
+>poetry run pytest
+================================================= test session starts ==================================================
+platform linux -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1
+rootdir: ~/aeris-apisdk-py
+collected 1 item
+
+tests/test_aerisapisdk.py .                                                                                      [100%]
+
+================================================== 1 passed in 0.04s ===================================================
 ```
 
-### And coding style tests
+### Coding style tests
 
 Explain what these tests test and why
 
