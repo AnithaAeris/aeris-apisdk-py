@@ -15,8 +15,10 @@ Installation / upgrade:
 
 
 Run:
+~~~
 * 'aeriscli' (Runs this way because aericli script gets installed in python/bin directory)
 * 'python -m aerisapisdk.cli' (Run via module command)
+~~~
 
 ## Getting Started - Development
 
