@@ -31,7 +31,7 @@ A step by step series of examples that tell you how to get a development env run
 Step 1: Clone the source to your local machine
 
 ```
->git clone https://github.com/aerisiot/aeris-apisdk-py.git
+$ git clone https://github.com/aerisiot/aeris-apisdk-py.git
 
 Cloning into 'aeris-apisdk-py'...
 remote: Enumerating objects: 38, done.
@@ -44,8 +44,8 @@ Unpacking objects: 100% (38/38), done.
 Step 2: Install dependencies
 
 ```
->cd aeris-apisdk-py
->poetry update
+$ cd aeris-apisdk-py
+$ poetry update
 
 Updating dependencies
 Resolving dependencies... (0.9s)
@@ -78,7 +78,7 @@ Package operations: 18 installs, 0 updates, 0 removals
 Step 3: Verify development environment working
 
 ```
->poetry run aeriscli
+$ poetry run aeriscli
 
 Usage: aeriscli [OPTIONS] COMMAND [ARGS]...
 
@@ -105,7 +105,7 @@ This section covers the automated tests for this system
 This project uses pytest for running functional tests
 
 ```
->poetry run pytest
+$ poetry run pytest
 ================================================= test session starts ==================================================
 platform linux -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1
 rootdir: ~/aeris-apisdk-py
@@ -123,7 +123,7 @@ This project used pycodestyle to ensure adherence to PEP 8 coding style rules.
 Running pycodestyle as below should return with no errors.
 
 ```
->pycodestyle --max-line-length=120 aerisapisdk/
+$ pycodestyle --max-line-length=120 aerisapisdk/
 ```
 
 
@@ -140,17 +140,17 @@ Please read [CONTRIBUTING.md] for details on our code of conduct, and the proces
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/aerisiot/aeris-apisdk-py/tags). 
 
 ## Authors
 
 * **Drew Johnson** - *Initial work*
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/aerisiot/aeris-apisdk-py/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
