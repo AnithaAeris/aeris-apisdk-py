@@ -145,6 +145,8 @@ Running pycodestyle as below should return with no errors.
 
 * [Poetry](https://python-poetry.org/) - Python dependency management
 * [Click](https://click.palletsprojects.com/en/7.x/) - Python package for creating beautiful command line interfaces
+* [pytest](https://docs.pytest.org/en/latest/) - Python testing tool that helps you write better programs
+* [pycodestyle](http://pycodestyle.pycqa.org/en/latest/index.html) -  A tool to check Python code against the style conventions in PEP 8
 
 ## Contributing
 
