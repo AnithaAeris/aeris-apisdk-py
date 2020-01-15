@@ -1,25 +1,11 @@
 # aeris-apisdk-py
 SDK and CLI for Aeris connectivity apis
 
-## Getting Started - Deployment
+## Getting Started - Install Package
 
-OS environments tested so far: 
-* Ubuntu 18 on Windows 10
-* Windows 10 cmd shell
+If you want to install and use the package rather than make changes to it, see:
 
-Python environments tested so far:
-* Python 3.7.5 / pip 19.3.1
-
-Installation / upgrade:
-* 'pip install aerisapisdk'
-* 'pip install --upgrade aerisapisdk'
-
-
-Run:
-~~~
-'aeriscli' (Runs this way because aericli script gets installed in python/bin or python/scripts directory)
-'python -m aerisapisdk.cli' (Run via module command)
-~~~
+https://github.com/aerisiot/aeris-apisdk-py/wiki
 
 ## Getting Started - Development
 
