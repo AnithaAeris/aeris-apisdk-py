@@ -19,6 +19,19 @@ def get_channel_endpoint(accountId, channelId=None):
         return afbase + '/notificationchannel/v2/' + accountId + '/channels/' + channelId
 
 
+def ping(verbose):
+    endpoint = get_application_endpoint('1')
+    r = requests.get(endpoint)
+    aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
+    if (r.status_code == 401):  # We are expecting this since we don't have valid parameters
+        print('Endpoint is alive: ' + endpoint)
+    elif (r.status_code == 404):
+        print('Not expecting a 404 ...')
+        aerisutils.print_http_error(r)
+    else:
+        aerisutils.print_http_error(r)
+
+
 def get_applications(verbose, accountId, apiKey, searchAppShortName):
     """
     Calls AerFrame API to get a list of all registered applications for the account.
@@ -307,7 +320,7 @@ def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChan
                          'notifyURL': 'https://api.aerframe.aeris.com/notificationchannel/v2/'
                          + accountId + '/channels/' + appChannelId + '/callback'}
     payload = {'callbackReference': callbackReference,
-               'filterCriteria': 'SP:*', \  # Could use SP:Aeris as example of service profile
+               'filterCriteria': 'SP:*',  # Could use SP:Aeris as example of service profile
                'destinationAddress': [appShortName]}
     myparams = {"apiKey": apiKey}
     print('Payload: \n' + json.dumps(payload, indent=4))

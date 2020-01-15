@@ -1,6 +1,5 @@
 import click
 import json
-import requests
 import pathlib
 import aerisapisdk.aeradminsdk as aeradminsdk
 import aerisapisdk.aertrafficsdk as aertrafficsdk
@@ -56,6 +55,19 @@ def mycli(ctx, verbose, config_file):
         print('Try runing config command')
         exit()
     # else: We are doing a config command
+
+
+@mycli.command()
+@click.pass_context
+def ping(ctx):
+    """Simple ping of the api endpoints
+    \f
+
+    """
+    print('Checking all api endpoints ...')
+    aeradminsdk.ping(ctx.obj['verbose'])
+    aertrafficsdk.ping(ctx.obj['verbose'])
+    aerframesdk.ping(ctx.obj['verbose'])
 
 
 @mycli.command()
