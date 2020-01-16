@@ -129,6 +129,29 @@ Running pycodestyle as below should return with no errors.
 $ pycodestyle --max-line-length=120 aerisapisdk/
 ```
 
+## Building
+
+```
+$ poetry build
+Building aerisapisdk (0.1.3)
+ - Building sdist
+ - Built aerisapisdk-0.1.3.tar.gz
+
+ - Building wheel
+ - Built aerisapisdk-0.1.3-py3-none-any.whl
+```
+
+## Publishing
+
+```
+$ poetry publish
+
+Publishing aerisapisdk (0.1.3) to PyPI
+Username: <myusername>
+Password:
+ - Uploading aerisapisdk-0.1.3-py3-none-any.whl 100%
+ - Uploading aerisapisdk-0.1.3.tar.gz 100%
+```
 
 ## Built With
 
