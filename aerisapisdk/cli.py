@@ -48,9 +48,10 @@ def default_from_context(default_name, default_value=' '):
 @click.pass_context
 def mycli(ctx, verbose, config_file):
     ctx.obj['verbose'] = verbose
+    print('context:\n' + str(ctx.invoked_subcommand))
     if load_config(ctx, config_file):
         aerisutils.vprint(verbose, 'Valid config for account ID: ' + ctx.obj['accountId'])
-    elif ctx.invoked_subcommand != 'config':  # This is not ok unless we are doing a config command
+    elif ctx.invoked_subcommand not in ['config', 'ping']:  # This is not ok unless we are doing a config or ping command
         print('Valid configuration not found')
         print('Try runing config command')
         exit()
