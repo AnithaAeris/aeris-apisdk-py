@@ -129,7 +129,21 @@ Running pycodestyle as below should return with no errors.
 $ pycodestyle --max-line-length=120 aerisapisdk/
 ```
 
+## Updating Version Number
+Before you build and publish, you will need to make sure that the version is changed so that users can easily pick up the latest.
+
+You can easily do that via poetry. For example, to increment the patch-level version, issue the command:
+
+```
+$ poetry version patch
+Bumping version from 0.1.4 to 0.1.5
+```
+
+
 ## Building
+You can use poetry to build the distribution that we will want to publish to pypi.org. Use the 'build' command.
+
+I have not found a way to clean out the previous build distribution. You may have to manually 'rm -rf dist' to remove before running the build.
 
 ```
 $ poetry build
@@ -142,6 +156,7 @@ Building aerisapisdk (0.1.3)
 ```
 
 ## Publishing
+The publish command uploads to pypi.org so that users can install via 'pip install' or 'pip install --upgrade'.
 
 ```
 $ poetry publish
