@@ -388,11 +388,25 @@ def poll_notification_channel(verbose, accountId, apiKey, channelURL):
     r = requests.get(channelURL, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if (r.status_code == 200):
-        getsms = json.loads(r.text)
-        print('MO SMS and MT SMS DR:\n' + json.dumps(getsms, indent=4))
+        notifications = json.loads(r.text)
+        aerisutils.vprint(verbose, 'MO SMS and MT SMS DR:\n' + json.dumps(notifications, indent=4))
+        return notifications
     else:  # Response code was not 200
         aerisutils.print_http_error(r)
-        return ''
+        return None
+
+
+def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, search):
+    print('Polling channelURL for polling interval: ' + channelURL)
+    for x in range(num):  # Poll up to num times 
+        notifications = poll_notification_channel(verbose, accountId, apiKey, channelURL)
+        if (notifications is not None):
+            if (len(notifications['deliveryInfoNotification']) == 0):
+                print('No pending notifications')
+                return None
+            else:
+                num_notifications = len(notifications['deliveryInfoNotification'][0]['deliveryInfo'])
+                print('Number of notifications = ' + str(num_notifications))
 
 
 def getlocation(verbose, accountId, apiKey, deviceIdType, deviceId):

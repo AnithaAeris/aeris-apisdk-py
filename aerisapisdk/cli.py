@@ -371,15 +371,17 @@ def send(ctx):
 
 
 @sms.command()  # Subcommand: aerframe sms send
+@click.option('--num', default=1, help="Number of receive requests")
 @click.pass_context
-def receive(ctx):
+def receive(ctx, num):
     """Receive SMS or Deliver Receipt
     \f
 
     """
     channelURL = ctx.obj['aerframeChannel']['channelData']['channelURL']
-    aerframesdk.poll_notification_channel(ctx.obj['verbose'], ctx.obj['accountId'],
-                                          ctx.obj['aerframeApplication']['apiKey'], channelURL)
+    aerframesdk.notifications_flush_search(ctx.obj['verbose'], ctx.obj['accountId'],
+                                          ctx.obj['aerframeApplication']['apiKey'], 
+                                          channelURL, num, None)
 
 
 @aerframe.group()
