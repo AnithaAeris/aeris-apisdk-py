@@ -170,7 +170,7 @@ def init(ctx):
     # AerFrame application
     aerframeApplicationId = aerframesdk.get_applications(ctx.obj['verbose'], ctx.obj['accountId'],
                                                          ctx.obj['apiKey'], afsdkappname)
-    if aerframeApplicationId == '':
+    if aerframeApplicationId is None:
         aerframeApplication = aerframesdk.create_application(ctx.obj['verbose'], ctx.obj['accountId'],
                                                              ctx.obj['apiKey'], afsdkappname)
     else:
@@ -180,7 +180,7 @@ def init(ctx):
     # Notification channel
     aerframeChannelId = aerframesdk.getchannels(ctx.obj['verbose'], ctx.obj['accountId'],
                                                 ctx.obj['apiKey'], afsdkappname)
-    if aerframeChannelId == '':
+    if aerframeChannelId is None:
         aerframeChannel = aerframesdk.createchannel(ctx.obj['verbose'], ctx.obj['accountId'],
                                                     ctx.obj['apiKey'], afsdkappname)
     else:
@@ -191,7 +191,7 @@ def init(ctx):
     appApiKey = ctx.obj['aerframeApplication']['apiKey']
     aerframeSubscriptionId = aerframesdk.getoutboundsubscriptions(ctx.obj['verbose'],
                                                                   ctx.obj['accountId'], appApiKey, afsdkappname)
-    if aerframeSubscriptionId == '':
+    if aerframeSubscriptionId is None:
         afchid = ctx.obj['aerframeChannel']['resourceURL'].split('/channels/', 1)[1]
         aerframeSubscription = aerframesdk.createoutboundsubscription(ctx.obj['verbose'], ctx.obj['accountId'],
                                                                       appApiKey, afsdkappname, afchid)
@@ -199,7 +199,7 @@ def init(ctx):
         aerframeSubscription = aerframesdk.getoutboundsubscription(ctx.obj['verbose'], ctx.obj['accountId'],
                                                                    appApiKey, afsdkappname, aerframeSubscriptionId)
     ctx.obj['aerframeSubscription'] = aerframeSubscription
-    aerisutils.vprint(ctx, '\nUpdated aerframe subscription config: ' + str(ctx.obj))
+    aerisutils.vprint(ctx.obj['verbose'], '\nUpdated aerframe subscription config: ' + str(ctx.obj))
     # Device IDs
     deviceDetails = aeradminsdk.get_device_details(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'],
                                                    ctx.obj['email'], ctx.obj['primaryDeviceIdType'],
@@ -209,6 +209,32 @@ def init(ctx):
     with open(default_config_filename, 'w') as myconfigfile:
         ctx.obj.pop('verbose', None)  # Don't store the verbose flag
         json.dump(ctx.obj, myconfigfile, indent=4)
+
+
+@aerframe.command()  # Subcommand: aerframe reset
+@click.pass_context
+def reset(ctx):
+    """Clear application, notification channel, and subscription
+    \f
+
+    """
+    # Subscription
+    appApiKey = ctx.obj['aerframeApplication']['apiKey']
+    aerframeSubscriptionId = aerframesdk.getoutboundsubscriptions(ctx.obj['verbose'],
+                                                                  ctx.obj['accountId'], appApiKey, afsdkappname)
+    if aerframeSubscriptionId is not None:
+        aerframesdk.deleteoutboundsubscription(ctx.obj['verbose'], ctx.obj['accountId'],
+                                               ctx.obj['aerframeApplication']['apiKey'], afsdkappname, aerframeSubscriptionId)    
+   # Notification channel
+    aerframeChannelId = aerframesdk.getchannels(ctx.obj['verbose'], ctx.obj['accountId'],
+                                                ctx.obj['apiKey'], afsdkappname)
+    if aerframeChannelId is not None:
+        aerframesdk.deletechannel(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], aerframeChannelId)    
+     # AerFrame application
+    aerframeApplicationId = aerframesdk.get_applications(ctx.obj['verbose'], ctx.obj['accountId'],
+                                                         ctx.obj['apiKey'], afsdkappname)
+    if aerframeApplicationId is not None:
+        aerframesdk.delete_application(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], aerframeApplicationId)
 
 
 @aerframe.group()
@@ -289,7 +315,7 @@ def create(ctx):
     aerframesdk.createchannel(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], 'aerframesdk')
 
 
-@channel.command()  # Subcommand: aerframe deletechannel
+@channel.command()  # Subcommand: aerframe channel delete
 @click.pass_context
 def delete(ctx):
     """Delete AerFrame notification channel
@@ -322,7 +348,7 @@ def get(ctx):
                                  ctx.obj['aerframeApplication']['apiKey'], afsdkappname)
 
 
-@subscription.command()  # Subcommand: aerframe createoutboundsubscription
+@subscription.command()  # Subcommand: aerframe subscription create
 @click.pass_context
 def create(ctx):
     """Create AerFrame subscription
@@ -334,7 +360,7 @@ def create(ctx):
                                            ctx.obj['aerframeApplication']['apiKey'], afsdkappname, appChannelID)
 
 
-@subscription.command()  # Subcommand: aerframe deletechannel
+@subscription.command()  # Subcommand: aerframe subscription delete
 @click.pass_context
 def delete(ctx):
     """Delete AerFrame subscription

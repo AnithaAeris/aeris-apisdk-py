@@ -33,7 +33,7 @@ def get_device_details(verbose, accountId, apiKey, email, deviceIdType, deviceId
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if (r.status_code == 200):
         device_details = json.loads(r.text)
-        print('Device details:\n' + json.dumps(device_details, indent=4))
+        aerisutils.vprint(verbose, 'Device details:\n' + json.dumps(device_details, indent=4))
         return device_details
     else:
         aerisutils.print_http_error(r)
