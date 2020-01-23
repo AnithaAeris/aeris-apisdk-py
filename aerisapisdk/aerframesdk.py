@@ -2,30 +2,30 @@ import json
 import requests
 import aerisapisdk.aerisutils as aerisutils
 
-afbase = 'https://api.aerframe.aeris.com'
+endpoint_base = 'https://api.aerframe.aeris.com'
 
 
 def get_application_endpoint(accountId, appId=None):
     if appId is None:
-        return afbase + '/registration/v2/' + accountId + '/applications'
+        return endpoint_base + '/registration/v2/' + accountId + '/applications'
     else:
-        return afbase + '/registration/v2/' + accountId + '/applications/' + appId
+        return endpoint_base + '/registration/v2/' + accountId + '/applications/' + appId
 
 
 def get_channel_endpoint(accountId, channelId=None):
     if channelId is None:
-        return afbase + '/notificationchannel/v2/' + accountId + '/channels'
+        return endpoint_base + '/notificationchannel/v2/' + accountId + '/channels'
     else:
-        return afbase + '/notificationchannel/v2/' + accountId + '/channels/' + channelId
+        return endpoint_base + '/notificationchannel/v2/' + accountId + '/channels/' + channelId
 
 
 def ping(verbose):
     endpoint = get_application_endpoint('1')
     r = requests.get(endpoint)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 401):  # We are expecting this since we don't have valid parameters
+    if r.status_code == 401:  # We are expecting this since we don't have valid parameters
         print('Endpoint is alive: ' + endpoint)
-    elif (r.status_code == 404):
+    elif r.status_code == 404:
         print('Not expecting a 404 ...')
         aerisutils.print_http_error(r)
     else:
@@ -53,13 +53,13 @@ def get_applications(verbose, accountId, apiKey, searchAppShortName):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         apps = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(apps['application'], indent=4))  # Print formatted json
         searchAppShortNameExists = False
         searchAppShortNameId = None
         for app in apps['application']:  # Iterate applications to try and find application we are looking for
-            if (app['applicationShortName'] == searchAppShortName):
+            if app['applicationShortName'] == searchAppShortName:
                 searchAppShortNameExists = True
                 searchAppShortNameId = app['resourceURL'].split('/applications/', 1)[1]
         if searchAppShortNameExists:
@@ -96,7 +96,7 @@ def get_application(verbose, accountId, apiKey, appId):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         appConfig = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(appConfig))
         return appConfig
@@ -132,7 +132,7 @@ def create_application(verbose, accountId, apiKey, appShortName):
     myparams = {"apiKey": apiKey}
     r = requests.post(endpoint, params=myparams, json=payload)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 201):  # Check for 'created' http response
+    if r.status_code == 201:  # Check for 'created' http response
         appConfig = json.loads(r.text)
         print('Created application ' + appShortName)
         aerisutils.vprint(verbose, 'Application info:\n' + json.dumps(appConfig, indent=4))
@@ -165,10 +165,10 @@ def delete_application(verbose, accountId, apiKey, appId):
     endpoint = get_application_endpoint(accountId, appId)  # Get app endpoint based on account ID and appID
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
-    if (r.status_code == 204):  # Check for 'no content' http response
+    if r.status_code == 204:  # Check for 'no content' http response
         print('Application successfully deleted.')
         return True
-    elif (r.status_code == 404):  # Check if no matching app ID
+    elif r.status_code == 404:  # Check if no matching app ID
         print('Application ID does not match current application.')
         return False
     else:
@@ -184,19 +184,20 @@ def getchannels(verbose, accountId, apiKey, searchAppTag):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         channels = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(channels['notificationChannel'], indent=4))  # Print formatted json
         searchAppTagExists = False
         searchAppTagId = None
+        sdkchannel = None
         for channel in channels['notificationChannel']:  # Iterate channels to try and find sdk application
-            if (channel['applicationTag'] == searchAppTag):
+            if channel['applicationTag'] == searchAppTag:
                 searchAppTagExists = True
                 sdkchannel = channel
                 searchAppTagId = channel['resourceURL'].split('/channels/', 1)[1]
         if searchAppTagExists:
             print(searchAppTag + ' channel exists. Channel ID: ' + searchAppTagId)
-            aerisutils.vprint(verbose,'Channel config: ' + json.dumps(sdkchannel, indent=4))
+            aerisutils.vprint(verbose, 'Channel config: ' + json.dumps(sdkchannel, indent=4))
             return searchAppTagId
         else:
             print(searchAppTag + ' channel does not exist')
@@ -211,7 +212,7 @@ def getchannel(verbose, accountId, apiKey, channelId):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         channelConfig = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(channelConfig))
         return channelConfig
@@ -230,7 +231,7 @@ def createchannel(verbose, accountId, apiKey, applicationTag):
     myparams = {"apiKey": apiKey}
     r = requests.post(endpoint, params=myparams, json=payload)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):  # In this case, we get a 200 for success rather than 201 like for application
+    if r.status_code == 200:  # In this case, we get a 200 for success rather than 201 like for application
         channelConfig = json.loads(r.text)
         print('Created notification channel for ' + applicationTag)
         aerisutils.vprint(verbose, 'Notification channel info:\n' + json.dumps(channelConfig, indent=4))
@@ -244,10 +245,10 @@ def deletechannel(verbose, accountId, apiKey, channelId):
     endpoint = get_channel_endpoint(accountId, channelId)
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
-    if (r.status_code == 204):  # Check for 'no content' http response
+    if r.status_code == 204:  # Check for 'no content' http response
         print('Channel successfully deleted.')
         return True
-    elif (r.status_code == 404):  # Check if no matching channel ID
+    elif r.status_code == 404:  # Check if no matching channel ID
         print('Channel ID does not match current application.')
         return False
     else:
@@ -268,7 +269,7 @@ def getinboundsubscriptions(verbose, accountId, apiKey, appShortName):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         subscriptions = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(subscriptions['subscription'], indent=4))  # Print formatted json
         print('Inbound subscriptions:\n')
@@ -285,10 +286,11 @@ def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         subscriptions = json.loads(r.text)
         if 'deliveryReceiptSubscription' in subscriptions.keys():
-            aerisutils.vprint(verbose, appShortName + ' has outbound (MT-DR) subscriptions.' + json.dumps(subscriptions, indent=4))
+            aerisutils.vprint(verbose, appShortName + ' has outbound (MT-DR) subscriptions.' + json.dumps(subscriptions,
+                                                                                                          indent=4))
             subscriptionId \
                 = subscriptions['deliveryReceiptSubscription'][0]['resourceURL'].split('/subscriptions/', 1)[1]
             print(appShortName + ' subscription ID: ' + subscriptionId)
@@ -307,7 +309,7 @@ def getoutboundsubscription(verbose, accountId, apiKey, appShortName, subscripti
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         subscription = json.loads(r.text)
         return subscription
     else:  # Response code was not 200
@@ -320,14 +322,14 @@ def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChan
                + appShortName + '/subscriptions'
     callbackReference = {'callbackData': appShortName + '-mt',
                          'notifyURL': 'https://api.aerframe.aeris.com/notificationchannel/v2/'
-                         + accountId + '/channels/' + appChannelId + '/callback'}
+                                      + accountId + '/channels/' + appChannelId + '/callback'}
     payload = {'callbackReference': callbackReference,
                'filterCriteria': 'SP:*',  # Could use SP:Aeris as example of service profile
                'destinationAddress': [appShortName]}
     myparams = {"apiKey": apiKey}
     r = requests.post(endpoint, params=myparams, json=payload)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 201):  # In this case, we get a 201 'created' for success
+    if r.status_code == 201:  # In this case, we get a 201 'created' for success
         subscriptionConfig = json.loads(r.text)
         print('Created outbound (MT-DR) subscription for ' + appShortName)
         aerisutils.vprint(verbose, 'Subscription info:\n' + json.dumps(subscriptionConfig, indent=4))
@@ -339,13 +341,13 @@ def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChan
 
 def deleteoutboundsubscription(verbose, accountId, apiKey, appShortName, subscriptionId):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
-        + appShortName + '/subscriptions/' + subscriptionId
+               + appShortName + '/subscriptions/' + subscriptionId
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
-    if (r.status_code == 204):  # Check for 'no content' http response
+    if r.status_code == 204:  # Check for 'no content' http response
         print('Subscription successfully deleted.')
         return True
-    elif (r.status_code == 404):  # Check if no matching subscription ID
+    elif r.status_code == 404:  # Check if no matching subscription ID
         print('Subscription ID does not match current application.')
         return False
     else:
@@ -369,11 +371,11 @@ def sendmtsms(verbose, accountId, apiKey, appShortName, imsiDestination, smsText
     # print('Payload: \n' + json.dumps(payload, indent=4))
     r = requests.post(endpoint, params=myparams, json=payload)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 201):  # In this case, we get a 201 'created' for success
+    if r.status_code == 201:  # In this case, we get a 201 'created' for success
         sendsmsresponse = json.loads(r.text)
         print('Sent SMS:\n' + json.dumps(sendsmsresponse, indent=4))
         return sendsmsresponse
-    elif (r.status_code == 404):  # Check if no matching device IMSI or IMSI not support SMS
+    elif r.status_code == 404:  # Check if no matching device IMSI or IMSI not support SMS
         print('IMSI is not found or does not support SMS.')
         print(r.text)
         return False
@@ -387,7 +389,7 @@ def poll_notification_channel(verbose, accountId, apiKey, channelURL):
     print('Polling channelURL for polling interval: ' + channelURL)
     r = requests.get(channelURL, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         notifications = json.loads(r.text)
         aerisutils.vprint(verbose, 'MO SMS and MT SMS DR:\n' + json.dumps(notifications, indent=4))
         return notifications
@@ -400,8 +402,8 @@ def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, sear
     print('Polling channelURL for polling interval: ' + channelURL)
     for x in range(num):  # Poll up to num times 
         notifications = poll_notification_channel(verbose, accountId, apiKey, channelURL)
-        if (notifications is not None):
-            if (len(notifications['deliveryInfoNotification']) == 0):
+        if notifications is not None:
+            if len(notifications['deliveryInfoNotification']) == 0:
                 print('No pending notifications')
                 return None
             else:
@@ -415,7 +417,7 @@ def getlocation(verbose, accountId, apiKey, deviceIdType, deviceId):
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
-    if (r.status_code == 200):
+    if r.status_code == 200:
         locationInfo = json.loads(r.text)
         print('Location information:\n' + json.dumps(locationInfo, indent=4))
     else:  # Response code was not 200

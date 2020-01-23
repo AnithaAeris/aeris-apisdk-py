@@ -6,18 +6,17 @@ import aerisapisdk.aertrafficsdk as aertrafficsdk
 import aerisapisdk.aerframesdk as aerframesdk
 import aerisapisdk.aerisutils as aerisutils
 
-
 # Resolve this user's home directory path
-homedir = str(pathlib.Path.home())
-default_config_filename = homedir + "/.aconfig"
+home_directory = str(pathlib.Path.home())
+default_config_filename = home_directory + "/.aeris_config"
 afsdkappname = 'aerframesdk'  # Short name used for the AerFrame application created for this SDK
 
 
 # Loads configuration from file
-def load_config(ctx, configfilename):
+def load_config(ctx, config_filename):
     try:
-        with open(configfilename) as myconfigfile:
-            ctx.obj.update(json.load(myconfigfile))
+        with open(config_filename) as my_config_file:
+            ctx.obj.update(json.load(my_config_file))
         aerisutils.vprint(ctx.obj['verbose'], 'Configuration: ' + str(ctx.obj))
         return True
     except IOError:
@@ -33,6 +32,7 @@ def default_from_context(default_name, default_value=' '):
             except KeyError:
                 self.default = default_value
             return super(OptionDefaultFromContext, self).get_default(ctx)
+
     return OptionDefaultFromContext
 
 
@@ -44,16 +44,17 @@ def default_from_context(default_name, default_value=' '):
 @click.group()
 @click.option('-v', '--verbose', is_flag=True, default=False, help="Verbose output")
 @click.option("--config-file", "-cfg", default=default_config_filename,
-              help="Path to aservices config file.")
+              help="Path to config file.")
 @click.pass_context
 def mycli(ctx, verbose, config_file):
     ctx.obj['verbose'] = verbose
     print('context:\n' + str(ctx.invoked_subcommand))
     if load_config(ctx, config_file):
         aerisutils.vprint(verbose, 'Valid config for account ID: ' + ctx.obj['accountId'])
-    elif ctx.invoked_subcommand not in ['config', 'ping']:  # This is not ok unless we are doing a config or ping command
+    elif ctx.invoked_subcommand not in ['config',
+                                        'ping']:  # This is not ok unless we are doing a config or ping command
         print('Valid configuration not found')
-        print('Try runing config command')
+        print('Try running config command')
         exit()
     # else: We are doing a config command
 
@@ -225,17 +226,19 @@ def reset(ctx):
                                                                   ctx.obj['accountId'], appApiKey, afsdkappname)
     if aerframeSubscriptionId is not None:
         aerframesdk.deleteoutboundsubscription(ctx.obj['verbose'], ctx.obj['accountId'],
-                                               ctx.obj['aerframeApplication']['apiKey'], afsdkappname, aerframeSubscriptionId)    
-   # Notification channel
+                                               ctx.obj['aerframeApplication']['apiKey'], afsdkappname,
+                                               aerframeSubscriptionId)
+        # Notification channel
     aerframeChannelId = aerframesdk.getchannels(ctx.obj['verbose'], ctx.obj['accountId'],
                                                 ctx.obj['apiKey'], afsdkappname)
     if aerframeChannelId is not None:
-        aerframesdk.deletechannel(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], aerframeChannelId)    
-     # AerFrame application
+        aerframesdk.deletechannel(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], aerframeChannelId)
+        # AerFrame application
     aerframeApplicationId = aerframesdk.get_applications(ctx.obj['verbose'], ctx.obj['accountId'],
                                                          ctx.obj['apiKey'], afsdkappname)
     if aerframeApplicationId is not None:
-        aerframesdk.delete_application(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'], aerframeApplicationId)
+        aerframesdk.delete_application(ctx.obj['verbose'], ctx.obj['accountId'], ctx.obj['apiKey'],
+                                       aerframeApplicationId)
 
 
 @aerframe.group()
@@ -407,8 +410,8 @@ def receive(ctx, num):
     """
     channelURL = ctx.obj['aerframeChannel']['channelData']['channelURL']
     aerframesdk.notifications_flush_search(ctx.obj['verbose'], ctx.obj['accountId'],
-                                          ctx.obj['aerframeApplication']['apiKey'], 
-                                          channelURL, num, None)
+                                           ctx.obj['aerframeApplication']['apiKey'],
+                                           channelURL, num, None)
 
 
 @aerframe.group()
