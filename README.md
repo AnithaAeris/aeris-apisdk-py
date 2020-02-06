@@ -8,7 +8,7 @@ This is not production code. There is no formal support provided by Aeris for th
 
 If you want to install and use the package rather than make changes to it, see:
 
-https://github.com/aerisiot/aeris-apisdk-py/wiki
+https://github.com/aeristhings/aeris-apisdk-py/wiki
 
 ## Getting Started - Development
 
@@ -34,7 +34,7 @@ A step by step series of examples that tell you how to get a development env run
 Step 1: Clone the source to your local machine
 
 ```
-$ git clone https://github.com/aerisiot/aeris-apisdk-py.git
+$ git clone https://github.com/aeristhings/aeris-apisdk-py.git
 
 Cloning into 'aeris-apisdk-py'...
 remote: Enumerating objects: 38, done.
