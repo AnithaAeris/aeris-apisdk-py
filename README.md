@@ -1,7 +1,12 @@
 # aeris-apisdk-py
-This package is intended to provide both an SDK and CLI for the Aeris connectivity apis. It can also serve as sample code for customers to write their own integrations to Aeris APIs.
+This package is intended to provide both an SDK and CLI for the Aeris connectivity APIs. It can also serve as sample code for customers to write their own integrations to Aeris APIs.
 
-This is not production code. There is no formal support provided by Aeris for this sdk.
+This is not production code. There is no formal support provided by Aeris for this SDK.
+
+
+## Getting Started - Aeris API Documentation
+
+You may find information about the Aeris connectivity APIs [here](https://aeriscom.zendesk.com/hc/en-us/categories/360002203434).
 
 
 ## Getting Started - Install Package
