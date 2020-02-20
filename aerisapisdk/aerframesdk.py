@@ -179,7 +179,7 @@ def delete_application(verbose, accountId, apiKey, appId):
 # ========================================================================
 
 
-def getchannels(verbose, accountId, apiKey, searchAppTag):
+def get_channels(verbose, accountId, apiKey, searchAppTag):
     endpoint = get_channel_endpoint(accountId)
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -207,7 +207,7 @@ def getchannels(verbose, accountId, apiKey, searchAppTag):
         return None
 
 
-def getchannel(verbose, accountId, apiKey, channelId):
+def get_channel(verbose, accountId, apiKey, channelId):
     endpoint = get_channel_endpoint(accountId, channelId)
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -221,7 +221,7 @@ def getchannel(verbose, accountId, apiKey, channelId):
         return ''
 
 
-def createchannel(verbose, accountId, apiKey, applicationTag):
+def create_channel(verbose, accountId, apiKey, applicationTag):
     endpoint = get_channel_endpoint(accountId)
     channelData = {'maxNotifications': '15',
                    'type': 'nc:LongPollingData'}
@@ -241,7 +241,7 @@ def createchannel(verbose, accountId, apiKey, applicationTag):
         return ''
 
 
-def deletechannel(verbose, accountId, apiKey, channelId):
+def delete_channel(verbose, accountId, apiKey, channelId):
     endpoint = get_channel_endpoint(accountId, channelId)
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
@@ -259,12 +259,12 @@ def deletechannel(verbose, accountId, apiKey, channelId):
 # ========================================================================
 
 
-def getsubscriptions(verbose, accountId, apiKey, appShortName):
-    getinboundsubscriptions(verbose, accountId, apiKey, appShortName)
-    getoutboundsubscriptions(verbose, accountId, apiKey, appShortName)
+def get_subscriptions(verbose, accountId, apiKey, appShortName):
+    get_inbound_subscriptions(verbose, accountId, apiKey, appShortName)
+    get_outbound_subscriptions(verbose, accountId, apiKey, appShortName)
 
 
-def getinboundsubscriptions(verbose, accountId, apiKey, appShortName):
+def get_inbound_subscriptions(verbose, accountId, apiKey, appShortName):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/inbound/subscriptions'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -280,7 +280,7 @@ def getinboundsubscriptions(verbose, accountId, apiKey, appShortName):
         return ''
 
 
-def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
+def get_outbound_subscriptions(verbose, accountId, apiKey, appShortName):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
     myparams = {'apiKey': apiKey}
@@ -303,7 +303,7 @@ def getoutboundsubscriptions(verbose, accountId, apiKey, appShortName):
         return None
 
 
-def getoutboundsubscription(verbose, accountId, apiKey, appShortName, subscriptionId):
+def get_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {'apiKey': apiKey}
@@ -317,7 +317,7 @@ def getoutboundsubscription(verbose, accountId, apiKey, appShortName, subscripti
         return ''
 
 
-def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChannelId):
+def create_outbound_subscription(verbose, accountId, apiKey, appShortName, appChannelId):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
     callbackReference = {'callbackData': appShortName + '-mt',
@@ -339,7 +339,7 @@ def createoutboundsubscription(verbose, accountId, apiKey, appShortName, appChan
         return None
 
 
-def deleteoutboundsubscription(verbose, accountId, apiKey, appShortName, subscriptionId):
+def delete_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {"apiKey": apiKey}
@@ -358,7 +358,7 @@ def deleteoutboundsubscription(verbose, accountId, apiKey, appShortName, subscri
 # ========================================================================
 
 
-def sendmtsms(verbose, accountId, apiKey, appShortName, imsiDestination, smsText):
+def send_mt_sms(verbose, accountId, apiKey, appShortName, imsiDestination, smsText):
     endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/requests'
     address = [imsiDestination]
     outboundSMSTextMessage = {"message": smsText}
@@ -400,7 +400,7 @@ def poll_notification_channel(verbose, accountId, apiKey, channelURL):
 
 def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, search):
     print('Polling channelURL for polling interval: ' + channelURL)
-    for x in range(num):  # Poll up to num times 
+    for x in range(num):  # Poll up to num times
         notifications = poll_notification_channel(verbose, accountId, apiKey, channelURL)
         if notifications is not None:
             if len(notifications['deliveryInfoNotification']) == 0:
@@ -411,7 +411,7 @@ def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, sear
                 print('Number of notifications = ' + str(num_notifications))
 
 
-def getlocation(verbose, accountId, apiKey, deviceIdType, deviceId):
+def get_location(verbose, accountId, apiKey, deviceIdType, deviceId):
     endpoint = 'https://api.aerframe.aeris.com/networkservices/v2/' + accountId + '/devices/' \
                + deviceIdType + '/' + deviceId + '/networkLocation'
     myparams = {'apiKey': apiKey}
