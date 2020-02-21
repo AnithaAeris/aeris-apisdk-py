@@ -405,7 +405,7 @@ def send(ctx):
 @click.option('--num', default=1, help="Number of receive requests")
 @click.pass_context
 def receive(ctx, num):
-    """Receive SMS or Deliver Receipt
+    """Receive SMS or Delivery Receipt
     \f
 
     """
