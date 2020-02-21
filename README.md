@@ -53,7 +53,7 @@ Step 2: Install dependencies
 
 ```
 $ cd aeris-apisdk-py
-$ poetry update
+$ poetry install
 
 Updating dependencies
 Resolving dependencies... (0.9s)
