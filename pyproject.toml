@@ -5,7 +5,7 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6.9"
 click = "^7.0"
 requests = "^2.22"
 pathlib = "^1.0.1"

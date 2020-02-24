@@ -10,6 +10,7 @@ atv1base = atbase + 'v1/'
 def get_endpoint():
     return atv1base
 
+
 def ping(verbose):
     endpoint = atbase
     r = requests.get(endpoint)
@@ -23,7 +24,7 @@ def ping(verbose):
         aerisutils.print_http_error(r)
 
 
-def getdevicesummaryreport(accountId, apiKey, email, deviceIdType, deviceId):
+def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId):
     endpoint = get_endpoint() + accountId
     endpoint = endpoint + '/systemReports/deviceSummary'
     myparams = {'apiKey': apiKey, "durationInMonths": '3', 'subAccounts': 'false'}
