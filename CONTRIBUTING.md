@@ -33,10 +33,10 @@ If you need to provide the configuration file created by the `aeriscli config` c
 
 Before submitting a pull request, please be sure it passes our [functional tests](https://github.com/aeristhings/aeris-apisdk-py#functional-tests) and [coding style tests](https://github.com/aeristhings/aeris-apisdk-py#coding-style-tests).
 
-The following is only relevant if the major version of aeris-apisdk-py is greater than zero (0):
+The following only applies if the major version of aeris-apisdk-py is greater than zero (0):
 
-If your changes would break backwards compatibility, please:
+This project uses semantic versioning. If your changes would break backwards compatibility, the major version number must be bumped for the next release. You can help ensure this by:
 
-* mention this in your pull request,
-* run `poetry version major` as part of your changes, or
-* both of the above.
+* mentioning that your changes break backwards compatibility in your pull request,
+* running `poetry version major` as part of your changes, or
+* doing both of the above.
