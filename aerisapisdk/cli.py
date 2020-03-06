@@ -5,18 +5,17 @@ import aerisapisdk.aeradminsdk as aeradminsdk
 import aerisapisdk.aertrafficsdk as aertrafficsdk
 import aerisapisdk.aerframesdk as aerframesdk
 import aerisapisdk.aerisutils as aerisutils
+import aerisapisdk.aerisconfig as aerisconfig
 
-# Resolve this user's home directory path
-home_directory = str(pathlib.Path.home())
-default_config_filename = home_directory + "/.aeris_config"
+
+default_config_filename = aerisconfig.default_config_filename
 afsdkappname = 'aerframesdk'  # Short name used for the AerFrame application created for this SDK
 
 
 # Loads configuration from file
 def load_config(ctx, config_filename):
     try:
-        with open(config_filename) as my_config_file:
-            ctx.obj.update(json.load(my_config_file))
+        ctx.obj.update(aerisconfig.load_config(config_filename))
         aerisutils.vprint(ctx.obj['verbose'], 'Configuration: ' + str(ctx.obj))
         return True
     except IOError:

@@ -1,18 +1,22 @@
 import json
 import requests
 import aerisapisdk.aerisutils as aerisutils
+import aerisapisdk.aerisconfig as aerisconfig
 
 
-atbase = 'https://aertrafficapi.aeris.com/'
-atv1base = atbase + 'v1/'
+def get_aertraffic_base():
+    """
+    Returns the base URL of the AerTraffic API (plus a trailing slash) as a string.
+    """
+    return aerisconfig.get_aertraffic_url() + '/'
 
 
 def get_endpoint():
-    return atv1base
+    return get_aertraffic_base() + 'v1/'
 
 
 def ping(verbose):
-    endpoint = atbase
+    endpoint = get_aertraffic_base()
     r = requests.get(endpoint)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if (r.status_code == 200):  # We are expecting a 200 in this case

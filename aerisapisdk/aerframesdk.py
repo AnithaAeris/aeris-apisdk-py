@@ -1,11 +1,11 @@
 import json
 import requests
 import aerisapisdk.aerisutils as aerisutils
-
-endpoint_base = 'https://api.aerframe.aeris.com'
+import aerisapisdk.aerisconfig as aerisconfig
 
 
 def get_application_endpoint(accountId, appId=None):
+    endpoint_base = aerisconfig.get_aerframe_api_url()
     if appId is None:
         return endpoint_base + '/registration/v2/' + accountId + '/applications'
     else:
@@ -13,6 +13,7 @@ def get_application_endpoint(accountId, appId=None):
 
 
 def get_channel_endpoint(accountId, channelId=None):
+    endpoint_base = aerisconfig.get_aerframe_api_url()
     if channelId is None:
         return endpoint_base + '/notificationchannel/v2/' + accountId + '/channels'
     else:
@@ -20,11 +21,27 @@ def get_channel_endpoint(accountId, channelId=None):
 
 
 def ping(verbose):
-    endpoint = get_application_endpoint('1')
-    r = requests.get(endpoint)
+    """
+    Checks that the AerFrame API and AerFrame Longpoll endpoints are reachable.
+    """
+    # Check the AerFrame API:
+    af_api_endpoint = get_application_endpoint('1')
+    r = requests.get(af_api_endpoint)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if r.status_code == 401:  # We are expecting this since we don't have valid parameters
-        print('Endpoint is alive: ' + endpoint)
+        print('Endpoint is alive: ' + af_api_endpoint)
+    elif r.status_code == 404:
+        print('Not expecting a 404 ...')
+        aerisutils.print_http_error(r)
+    else:
+        aerisutils.print_http_error(r)
+
+    # Check Longpoll:
+    af_lp_endpoint = aerisconfig.get_aerframe_longpoll_url()
+    r = requests.get(af_lp_endpoint)
+    aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
+    if r.status_code == 403:  # We are expecting this since we don't have valid parameters
+        print('Endpoint is alive: ' + af_lp_endpoint)
     elif r.status_code == 404:
         print('Not expecting a 404 ...')
         aerisutils.print_http_error(r)
@@ -42,6 +59,8 @@ def get_applications(verbose, accountId, apiKey, searchAppShortName):
         String version of the numerical account ID
     apiKey : str
         String version of the GUID API Key. Can be found in AerPort / Quicklinks / API Keys
+    searchAppShortName : str
+        String short name of the application to search for
 
     Returns
     -------
@@ -265,7 +284,7 @@ def get_subscriptions(verbose, accountId, apiKey, appShortName):
 
 
 def get_inbound_subscriptions(verbose, accountId, apiKey, appShortName):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/inbound/subscriptions'
+    endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/inbound/subscriptions'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
@@ -281,7 +300,7 @@ def get_inbound_subscriptions(verbose, accountId, apiKey, appShortName):
 
 
 def get_outbound_subscriptions(verbose, accountId, apiKey, appShortName):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+    endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -304,7 +323,7 @@ def get_outbound_subscriptions(verbose, accountId, apiKey, appShortName):
 
 
 def get_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+    endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -318,11 +337,13 @@ def get_outbound_subscription(verbose, accountId, apiKey, appShortName, subscrip
 
 
 def create_outbound_subscription(verbose, accountId, apiKey, appShortName, appChannelId):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+    endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
-    callbackReference = {'callbackData': appShortName + '-mt',
-                         'notifyURL': 'https://api.aerframe.aeris.com/notificationchannel/v2/'
-                                      + accountId + '/channels/' + appChannelId + '/callback'}
+    callbackReference = {
+        'callbackData': appShortName + '-mt',
+        'notifyURL': aerisconfig.get_aerframe_api_url() + '/notificationchannel/v2/'
+        + accountId + '/channels/' + appChannelId + '/callback'
+    }
     payload = {'callbackReference': callbackReference,
                'filterCriteria': 'SP:*',  # Could use SP:Aeris as example of service profile
                'destinationAddress': [appShortName]}
@@ -340,7 +361,7 @@ def create_outbound_subscription(verbose, accountId, apiKey, appShortName, appCh
 
 
 def delete_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' \
+    endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
@@ -359,7 +380,8 @@ def delete_outbound_subscription(verbose, accountId, apiKey, appShortName, subsc
 
 
 def send_mt_sms(verbose, accountId, apiKey, appShortName, imsiDestination, smsText):
-    endpoint = 'https://api.aerframe.aeris.com/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/requests'
+    endpoint = aerisconfig.get_aerframe_api_url() \
+               + '/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/requests'
     address = [imsiDestination]
     outboundSMSTextMessage = {"message": smsText}
     payload = {'address': address,
@@ -412,7 +434,7 @@ def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, sear
 
 
 def get_location(verbose, accountId, apiKey, deviceIdType, deviceId):
-    endpoint = 'https://api.aerframe.aeris.com/networkservices/v2/' + accountId + '/devices/' \
+    endpoint = aerisconfig.get_aerframe_api_url() + '/networkservices/v2/' + accountId + '/devices/' \
                + deviceIdType + '/' + deviceId + '/networkLocation'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)

@@ -134,8 +134,20 @@ Running pycodestyle as below should return with no errors.
 $ pycodestyle --max-line-length=120 aerisapisdk/
 ```
 
+### Integration tests
+
+To specify your own Aeris API endpoints, create a configuration file that contains a JSON object with the key "urls" and value an object with keys
+
+* aerframe_ws_api
+* aerframe_lp_api
+* aeradmin_api
+* aertraffic_api
+
+Then, either use the `--config-file` argument to the `aeriscli` command, or the `aerisapisdk.aerisconfig.load_config` method to load that file.
+
+
 ## Updating Version Number
-Before you build and publish, you will need to make sure that the version is changed so that users can easily pick up the latest.
+Before you build and publish, you will need to make sure that the version is changed so that users can easily pick up the latest version.
 
 You can easily do that via poetry. For example, to increment the patch-level version, issue the command:
 

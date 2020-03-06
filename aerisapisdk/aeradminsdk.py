@@ -1,13 +1,18 @@
 import json
 import requests
 import aerisapisdk.aerisutils as aerisutils
+import aerisapisdk.aerisconfig as aerisconfig
 
-endpoint_base = 'https://aeradminapi.aeris.com/'
-aav5base = endpoint_base + 'AerAdmin_WS_5_0/rest/'
+
+def get_aeradmin_base():
+    """
+    Returns the AerAdmin API base URL plus a trailing slash as a string.
+    """
+    return aerisconfig.get_aeradmin_url() + '/'
 
 
 def get_endpoint():
-    return aav5base
+    return get_aeradmin_base() + 'AerAdmin_WS_5_0/rest/'
 
 
 def ping(verbose):

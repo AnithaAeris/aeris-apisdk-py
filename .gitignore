@@ -131,3 +131,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Custom Aeris configuration files
+*aeris_config*
