@@ -15,7 +15,7 @@ def get_endpoint():
     return get_aertraffic_base() + 'v1/'
 
 
-def ping(verbose):
+def ping(verbose=False):
     endpoint = get_aertraffic_base()
     r = requests.get(endpoint)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
