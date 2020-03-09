@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aerisapisdk"
-version = "0.1.6"
+version = "0.1.5"
 description = ""
 authors = ["Your Name <you@example.com>"]
 
