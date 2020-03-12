@@ -2,6 +2,7 @@ import json
 import requests
 import aerisapisdk.aerisutils as aerisutils
 import aerisapisdk.aerisconfig as aerisconfig
+from aerisapisdk.exceptions import ApiException
 
 
 def get_application_endpoint(accountId, appId=None):
@@ -49,7 +50,7 @@ def ping(verbose):
         aerisutils.print_http_error(r)
 
 
-def get_applications(verbose, accountId, apiKey, searchAppShortName):
+def get_applications(accountId, apiKey, searchAppShortName, verbose):
     """
     Calls AerFrame API to get a list of all registered applications for the account.
 
@@ -61,11 +62,17 @@ def get_applications(verbose, accountId, apiKey, searchAppShortName):
         String version of the GUID API Key. Can be found in AerPort / Quicklinks / API Keys
     searchAppShortName : str
         String short name of the application to search for
+    verbose : bool
+        True to enable verbose printing
 
     Returns
     -------
     str
-        String version of the GUID app ID for the app short name passed in or '' if no match found
+        String version of the GUID app ID for the app short name passed in or None if no match found
+
+    Raises
+    ------
+    ApiException if there was a problem
 
     """
     endpoint = get_application_endpoint(accountId)  # Get app endpoint based on account ID
@@ -89,10 +96,10 @@ def get_applications(verbose, accountId, apiKey, searchAppShortName):
             return searchAppShortNameId
     else:  # Response code was not 200
         aerisutils.print_http_error(r)
-        return None
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def get_application(verbose, accountId, apiKey, appId):
+def get_application_by_app_id(accountId, apiKey, appId, verbose=False):
     """
     Calls AerFrame API to get a specific registered application
 
@@ -104,6 +111,8 @@ def get_application(verbose, accountId, apiKey, appId):
         String version of the GUID API Key. Can be found in AerPort / Quicklinks / API Keys
     appId : str
         String version of the GUID app ID returned by the create_application call
+    verbose : bool
+        True to enable verbose printing
 
     Returns
     -------
@@ -121,15 +130,16 @@ def get_application(verbose, accountId, apiKey, appId):
         return appConfig
     else:
         aerisutils.print_http_error(r)
-        return ''
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def create_application(verbose, accountId, apiKey, appShortName):
+def create_application(accountId, apiKey, appShortName, appDescription='Application for aerframe sdk', verbose=False):
     """
     Calls AerFrame API to create a registered application
 
     Parameters
     ----------
+    appDescription
     accountId : str
         String version of the numerical account ID
     apiKey : str
@@ -142,10 +152,13 @@ def create_application(verbose, accountId, apiKey, appShortName):
     Dictionary
         Configuration information for this application
 
+    Raises
+    ------
+    ApiException in case of an API error.
     """
     endpoint = get_application_endpoint(accountId)  # Get app endpoint based on account ID
     payload = {'applicationName': appShortName,
-               'description': 'Application for aerframe sdk',
+               'description': appDescription,
                'applicationShortName': appShortName,
                'applicationTag': appShortName}
     myparams = {"apiKey": apiKey}
@@ -158,10 +171,10 @@ def create_application(verbose, accountId, apiKey, appShortName):
         return appConfig
     else:
         aerisutils.print_http_error(r)
-        return ''
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def delete_application(verbose, accountId, apiKey, appId):
+def delete_application(accountId, apiKey, appId, verbose=False):
     """
     Calls AerFrame API to delete a registered application
 
@@ -178,7 +191,10 @@ def delete_application(verbose, accountId, apiKey, appId):
     -------
     bool
         True if successfully deleted
-        False if does not exist or problem deleting
+        False if the application did not exist
+    Raises
+    ------
+    ApiException if there was a problem
 
     """
     endpoint = get_application_endpoint(accountId, appId)  # Get app endpoint based on account ID and appID
@@ -192,13 +208,34 @@ def delete_application(verbose, accountId, apiKey, appId):
         return False
     else:
         aerisutils.print_http_error(r)
-        return False
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
 # ========================================================================
 
 
-def get_channels(verbose, accountId, apiKey, searchAppTag):
+def get_channel_id_by_tag(accountId, apiKey, searchAppTag, verbose=False):
+    """
+    Gets a channel's ID by its application tag. If there are multiple channels with the same application tag, returns
+    only one of them.
+    Parameters
+    ----------
+    accountId: str
+    apiKey: str
+    searchAppTag: str
+        the application tag that the channel was created with
+    verbose: bool
+
+    Returns
+    -------
+    str
+        The ID of a channel that has the same application tag as "searchAppTag", or None if none were found
+
+    Raises
+    ------
+    ApiException if there was an API problem.
+
+    """
     endpoint = get_channel_endpoint(accountId)
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -223,10 +260,28 @@ def get_channels(verbose, accountId, apiKey, searchAppTag):
             return searchAppTagId
     else:  # Response code was not 200
         aerisutils.print_http_error(r)
-        return None
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def get_channel(verbose, accountId, apiKey, channelId):
+def get_channel(accountId, apiKey, channelId, verbose=False):
+    """
+    Gets details of a channel.
+    Parameters
+    ----------
+    accountId
+    apiKey
+    channelId
+    verbose
+
+    Returns
+    -------
+    object
+        the channel configuration details, or None if the channel was not found
+
+    Raises
+    ------
+    ApiException if there was another problem with the API
+    """
     endpoint = get_channel_endpoint(accountId, channelId)
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -235,12 +290,34 @@ def get_channel(verbose, accountId, apiKey, channelId):
         channelConfig = json.loads(r.text)
         aerisutils.vprint(verbose, json.dumps(channelConfig))
         return channelConfig
+    elif r.status_code == 404:
+        aerisutils.print_http_error(r)
+        return None
     else:
         aerisutils.print_http_error(r)
-        return ''
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def create_channel(verbose, accountId, apiKey, applicationTag):
+def create_channel(accountId, apiKey, applicationTag, verbose=False):
+    """
+    Creates a channel
+    Parameters
+    ----------
+    accountId: str
+    apiKey: str
+    applicationTag: str
+        a tag for this channel
+    verbose
+
+    Returns
+    -------
+    object
+        the channel configuration
+
+    Raises
+    ------
+    ApiException if there was a problem
+    """
     endpoint = get_channel_endpoint(accountId)
     channelData = {'maxNotifications': '15',
                    'type': 'nc:LongPollingData'}
@@ -257,10 +334,28 @@ def create_channel(verbose, accountId, apiKey, applicationTag):
         return channelConfig
     else:
         aerisutils.print_http_error(r)
-        return ''
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
-def delete_channel(verbose, accountId, apiKey, channelId):
+def delete_channel(accountId, apiKey, channelId, verbose):
+    """
+    Deletes a channel.
+    Parameters
+    ----------
+    accountId: str
+    apiKey: str
+    channelId: str
+        the channel ID to delete
+    verbose
+
+    Returns
+    -------
+    True if the channel was deleted, False if the channel did not exist
+
+    Raises
+    ------
+    ApiException if there was a problem with the API.
+    """
     endpoint = get_channel_endpoint(accountId, channelId)
     myparams = {"apiKey": apiKey}
     r = requests.delete(endpoint, params=myparams)
@@ -272,18 +367,18 @@ def delete_channel(verbose, accountId, apiKey, channelId):
         return False
     else:
         aerisutils.print_http_error(r)
-        return False
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
 
 
 # ========================================================================
 
 
-def get_subscriptions(verbose, accountId, apiKey, appShortName):
-    get_inbound_subscriptions(verbose, accountId, apiKey, appShortName)
-    get_outbound_subscriptions(verbose, accountId, apiKey, appShortName)
+def get_subscriptions(accountId, apiKey, appShortName, verbose=False):
+    get_inbound_subscriptions(accountId, apiKey, appShortName, verbose)
+    get_outbound_subscriptions(accountId, apiKey, appShortName, verbose)
 
 
-def get_inbound_subscriptions(verbose, accountId, apiKey, appShortName):
+def get_inbound_subscriptions(accountId, apiKey, appShortName, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/inbound/subscriptions'
     myparams = {'apiKey': apiKey}
     r = requests.get(endpoint, params=myparams)
@@ -299,7 +394,7 @@ def get_inbound_subscriptions(verbose, accountId, apiKey, appShortName):
         return ''
 
 
-def get_outbound_subscriptions(verbose, accountId, apiKey, appShortName):
+def get_outbound_subscriptions(accountId, apiKey, appShortName, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
     myparams = {'apiKey': apiKey}
@@ -322,7 +417,7 @@ def get_outbound_subscriptions(verbose, accountId, apiKey, appShortName):
         return None
 
 
-def get_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
+def get_outbound_subscription(accountId, apiKey, appShortName, subscriptionId, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {'apiKey': apiKey}
@@ -336,7 +431,7 @@ def get_outbound_subscription(verbose, accountId, apiKey, appShortName, subscrip
         return ''
 
 
-def create_outbound_subscription(verbose, accountId, apiKey, appShortName, appChannelId):
+def create_outbound_subscription(accountId, apiKey, appShortName, appChannelId, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions'
     callbackReference = {
@@ -360,7 +455,7 @@ def create_outbound_subscription(verbose, accountId, apiKey, appShortName, appCh
         return None
 
 
-def delete_outbound_subscription(verbose, accountId, apiKey, appShortName, subscriptionId):
+def delete_outbound_subscription(accountId, apiKey, appShortName, subscriptionId, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/smsmessaging/v2/' + accountId + '/outbound/' \
                + appShortName + '/subscriptions/' + subscriptionId
     myparams = {"apiKey": apiKey}
@@ -379,7 +474,7 @@ def delete_outbound_subscription(verbose, accountId, apiKey, appShortName, subsc
 # ========================================================================
 
 
-def send_mt_sms(verbose, accountId, apiKey, appShortName, imsiDestination, smsText):
+def send_mt_sms(accountId, apiKey, appShortName, imsiDestination, smsText, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() \
                + '/smsmessaging/v2/' + accountId + '/outbound/' + appShortName + '/requests'
     address = [imsiDestination]
@@ -406,7 +501,7 @@ def send_mt_sms(verbose, accountId, apiKey, appShortName, imsiDestination, smsTe
         return ''
 
 
-def poll_notification_channel(verbose, accountId, apiKey, channelURL):
+def poll_notification_channel(accountId, apiKey, channelURL, verbose=False):
     myparams = {'apiKey': apiKey}
     print('Polling channelURL for polling interval: ' + channelURL)
     r = requests.get(channelURL, params=myparams)
@@ -420,10 +515,10 @@ def poll_notification_channel(verbose, accountId, apiKey, channelURL):
         return None
 
 
-def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, search):
+def notifications_flush_search(accountId, apiKey, channelURL, num, search, verbose=False):
     print('Polling channelURL for polling interval: ' + channelURL)
     for x in range(num):  # Poll up to num times
-        notifications = poll_notification_channel(verbose, accountId, apiKey, channelURL)
+        notifications = poll_notification_channel(accountId, apiKey, channelURL, verbose)
         if notifications is not None:
             if len(notifications['deliveryInfoNotification']) == 0:
                 print('No pending notifications')
@@ -433,7 +528,7 @@ def notifications_flush_search(verbose, accountId, apiKey, channelURL, num, sear
                 print('Number of notifications = ' + str(num_notifications))
 
 
-def get_location(verbose, accountId, apiKey, deviceIdType, deviceId):
+def get_location(accountId, apiKey, deviceIdType, deviceId, verbose=False):
     endpoint = aerisconfig.get_aerframe_api_url() + '/networkservices/v2/' + accountId + '/devices/' \
                + deviceIdType + '/' + deviceId + '/networkLocation'
     myparams = {'apiKey': apiKey}
@@ -442,6 +537,7 @@ def get_location(verbose, accountId, apiKey, deviceIdType, deviceId):
     if r.status_code == 200:
         locationInfo = json.loads(r.text)
         print('Location information:\n' + json.dumps(locationInfo, indent=4))
+        return locationInfo
     else:  # Response code was not 200
         aerisutils.print_http_error(r)
-        return ''
+        raise ApiException('HTTP status code was ' + str(r.status_code), r)
