@@ -69,8 +69,8 @@ class AerTestCase(unittest.TestCase):
 
             if response_body is None:
                 string_response_body = None
-            elif isinstance(response_body, str) and len(response_body) == 0:
-                string_response_body = ''
+            elif isinstance(response_body, str):
+                string_response_body = response_body
             else:
                 string_response_body = json.dumps(response_body)
             return (response_status, response_headers, string_response_body)

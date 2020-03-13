@@ -29,6 +29,20 @@ def ping(verbose=False):
 
 
 def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId):
+    """Prints a device summary report.
+
+    Parameters
+    ----------
+    accountId: str
+    apiKey: str
+    email: str
+    deviceIdType: str
+    deviceId: str
+
+    Returns
+    -------
+    None
+    """
     endpoint = get_endpoint() + accountId
     endpoint = endpoint + '/systemReports/deviceSummary'
     myparams = {'apiKey': apiKey, "durationInMonths": '3', 'subAccounts': 'false'}

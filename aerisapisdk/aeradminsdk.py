@@ -6,8 +6,7 @@ from aerisapisdk.exceptions import ApiException
 
 
 def get_aeradmin_base():
-    """
-    Returns the AerAdmin API base URL plus a trailing slash as a string.
+    """Returns the AerAdmin API base URL plus a trailing slash as a string.
     """
     return aerisconfig.get_aeradmin_url() + '/'
 
@@ -30,32 +29,33 @@ def ping(verbose):
 
 
 def get_device_details(accountId, apiKey, email, deviceIdType, deviceId, verbose=False):
-    """
-    Gets details for a device.
+    """Gets details for a device.
     Parameters
     ----------
-    verbose: bool
-        True if you want extra output printed
     accountId: str
         The account ID that owns the device
     apiKey: str
         An API Key for the account ID
-    email
+    email: str
         The email address of the user making this request
-    deviceIdType
+    deviceIdType: str
         The type of device ID to query. See
         https://aeriscom.zendesk.com/hc/en-us/articles/360037274334-AerAdmin-5-0-REST-API-Specification for possible
         values.
-    deviceId
+    deviceId: str
         The ID of the device to query
+    verbose: bool, optional
+        True if you want extra output printed
 
     Returns
     -------
-    An object representing the device's details.
+    dict
+        A dict representing the device's details.
 
     Raises
     ------
-    An ApiException if there was a problem.
+    ApiException
+        if there was a problem.
     """
     endpoint = get_endpoint() + 'devices/details'
     payload = {"accountID": accountId,
@@ -80,8 +80,7 @@ def get_device_details(accountId, apiKey, email, deviceIdType, deviceId, verbose
 
 
 def get_device_network_details(accountId, apiKey, email, deviceIdType, deviceId, verbose=False):
-    """
-    Gets details about a device's network attributes (e.g., last registration time)
+    """Gets details about a device's network attributes (e.g., last registration time)
     Parameters
     ----------
     accountId: str
@@ -91,16 +90,18 @@ def get_device_network_details(accountId, apiKey, email, deviceIdType, deviceId,
         The type of device ID to query. See
         https://aeriscom.zendesk.com/hc/en-us/articles/360037274334-AerAdmin-5-0-REST-API-Specification for possible
         values.
-    deviceId
-    verbose
+    deviceId: str
+    verbose: bool, optional
 
     Returns
     -------
-    An object representing the network details of the device.
+    dict
+        A dict representing the network details of the device.
 
     Raises
     ------
-    An ApiException if there was a problem.
+    ApiException
+        if there was a problem with the API.
     """
     endpoint = get_endpoint() + 'devices/network/details'
     payload = {"accountID": accountId,
