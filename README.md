@@ -186,17 +186,17 @@ Please read [CONTRIBUTING.md] for details on our code of conduct, and the proces
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/aerisiot/aeris-apisdk-py/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/aeristhings/aeris-apisdk-py/tags). 
 
 ## Authors
 
 * **Drew Johnson** - *Initial work*
 
-See also the list of [contributors](https://github.com/aerisiot/aeris-apisdk-py/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/aeristhings/aeris-apisdk-py/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/aeristhings/aeris-apisdk-py/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 
