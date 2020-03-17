@@ -173,6 +173,19 @@ Password:
  - Uploading aerisapisdk-0.1.3.tar.gz 100%
 ```
 
+### Testing Publishing
+test.pypi.org is a test version of pypi.org. Once you have built the package (see "Building," above), you can use these instructions to test the release process. This is useful for testing PyPI's display of project metadata, such as the classifiers.
+
+1. Create an account on https://test.pypi.org/
+2. Verify your email address
+3. Add the test repository (named "test" in these examples):
+    1. `$ poetry config repositories.test https://test.pypi.org/legacy/`
+4. Configure credentials for the test repository:
+    1. `$ poetry config http-basic.test your_test.pypi.org_username your_test.pypi.org_password`
+5. Publish to the test repository:
+    1. `$ poetry publish -r test`
+
+
 ## Built With
 
 * [Poetry](https://python-poetry.org/) - Python dependency management
