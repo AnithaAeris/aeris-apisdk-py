@@ -146,7 +146,16 @@ To specify your own Aeris API endpoints, create a configuration file that contai
 Then, either use the `--config-file` argument to the `aeriscli` command, or the `aerisapisdk.aerisconfig.load_config` method to load that file.
 
 
-## Updating Version Number
+## Releasing
+
+This section covers release activities.
+
+### Changelog
+
+Make sure there is an entry in the [CHANGELOG](https://github.com/aeristhings/aeris-apisdk-py/blob/master/CHANGELOG.md) for the version you will release.
+Included should be the git tag for the release, new features added, and bugs fixed. 
+
+### Updating the Version Number
 Before you build and publish, you will need to make sure that the version is changed so that users can easily pick up the latest version.
 
 You can easily do that via poetry. For example, to increment the patch-level version, issue the command:
@@ -157,7 +166,7 @@ Bumping version from 0.1.4 to 0.1.5
 ```
 
 
-## Building
+### Building
 You can use poetry to build the distribution that we will want to publish to pypi.org. Use the 'build' command.
 
 I have not found a way to clean out the previous build distribution. You may have to manually 'rm -rf dist' to remove before running the build.
@@ -172,7 +181,7 @@ Building aerisapisdk (0.1.3)
  - Built aerisapisdk-0.1.3-py3-none-any.whl
 ```
 
-## Publishing
+### Publishing
 The publish command uploads to pypi.org so that users can install via 'pip install' or 'pip install --upgrade'.
 
 ```
@@ -184,6 +193,9 @@ Password:
  - Uploading aerisapisdk-0.1.3-py3-none-any.whl 100%
  - Uploading aerisapisdk-0.1.3.tar.gz 100%
 ```
+
+### Tagging
+Finally, tag the master branch with the version and push that tag.
 
 ## Built With
 
