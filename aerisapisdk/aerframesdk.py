@@ -792,7 +792,6 @@ def get_location(accountId, apiKey, deviceIdType, deviceId, verbose=False):
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if r.status_code == 200:
         locationInfo = json.loads(r.text)
-        print('Location information:\n' + json.dumps(locationInfo, indent=4))
         return locationInfo
     else:  # Response code was not 200
         aerisutils.print_http_error(r)

@@ -437,8 +437,9 @@ def location(ctx):
     \f
 
     """
-    aerframesdk.get_location(ctx.obj['accountId'], ctx.obj['aerframeApplication']['apiKey'], 'imsi', '204043398999957',
-                             ctx.obj['verbose'])
+    loc_info = aerframesdk.get_location(ctx.obj['accountId'], ctx.obj['aerframeApplication']['apiKey'], 'imsi',
+                                        '204043398999957', ctx.obj['verbose'])
+    print('Location information:\n' + json.dumps(loc_info, indent=4))
 
 
 def main():
