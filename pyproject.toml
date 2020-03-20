@@ -27,6 +27,7 @@ pycodestyle = "^2.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+responses = "^0.10.11"
 
 [tool.poetry.scripts]
 aeriscli = "aerisapisdk.cli:main"
