@@ -1,8 +1,22 @@
 [tool.poetry]
 name = "aerisapisdk"
 version = "0.1.5"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Provides both an SDK and a CLI for the Aeris Connectivity APIs."
+documentation = "https://github.com/aeristhings/aeris-apisdk-py/wiki"
+authors = ["Aeris Communications <aeris-api-publisher@aeris.net>"]
+homepage = "https://github.com/aeristhings/aeris-apisdk-py"
+repository = "https://github.com/aeristhings/aeris-apisdk-py"
+license = "Apache-2.0"
+readme = "pypi_readme.md"
+
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: Apache Software License",
+]
 
 [tool.poetry.dependencies]
 python = "^3.6.9"
