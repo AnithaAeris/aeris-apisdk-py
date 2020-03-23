@@ -1,6 +1,8 @@
 import click
 import json
+import os
 import pathlib
+import stat
 import aerisapisdk.aeradminsdk as aeradminsdk
 import aerisapisdk.aertrafficsdk as aertrafficsdk
 import aerisapisdk.aerframesdk as aerframesdk
@@ -90,6 +92,7 @@ def config(ctx, accountid, apikey, email, deviceidtype, deviceid):
                      "primaryDeviceIdType": deviceidtype,
                      "primaryDeviceId": deviceid}
     with open(default_config_filename, 'w') as myconfigfile:
+        os.chmod(default_config_filename, stat.S_IRUSR | stat.S_IWUSR)
         json.dump(config_values, myconfigfile, indent=4)
 
 
