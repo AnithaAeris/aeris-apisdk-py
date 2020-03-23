@@ -197,6 +197,20 @@ Password:
 ### Tagging
 Finally, tag the master branch with the version and push that tag.
 
+
+### Testing Publishing
+test.pypi.org is a test version of pypi.org. Once you have built the package (see "Building," above), you can use these instructions to test the release process. This is useful for testing PyPI's display of project metadata, such as the classifiers.
+
+1. Create an account on https://test.pypi.org/
+2. Verify your email address
+3. Add the test repository (named "test" in these examples):
+    1. `$ poetry config repositories.test https://test.pypi.org/legacy/`
+4. Configure credentials for the test repository:
+    1. `$ poetry config http-basic.test your_test.pypi.org_username your_test.pypi.org_password`
+5. Publish to the test repository:
+    1. `$ poetry publish -r test`
+
+
 ## Built With
 
 * [Poetry](https://python-poetry.org/) - Python dependency management
@@ -210,17 +224,17 @@ Please read [CONTRIBUTING.md] for details on our code of conduct, and the proces
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/aerisiot/aeris-apisdk-py/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/aeristhings/aeris-apisdk-py/tags). 
 
 ## Authors
 
 * **Drew Johnson** - *Initial work*
 
-See also the list of [contributors](https://github.com/aerisiot/aeris-apisdk-py/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/aeristhings/aeris-apisdk-py/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/aeristhings/aeris-apisdk-py/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 
