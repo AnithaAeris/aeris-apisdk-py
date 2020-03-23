@@ -9,7 +9,7 @@ $ cd sample
 $ python3 aerframe_budget_geofence.py --help
 ```
 
-...but, if you wish to install the aerisapisdk through pip, consider using a virtual environment:
+...but, if you wish to install the aerisapisdk through pip, consider using a [virtual environment](https://docs.python.org/3/tutorial/venv.html):
 
 ```
 $ cd sample
@@ -18,5 +18,7 @@ $ source venv/bin/activate
 $ pip3 install aerisapisdk
 $ python3 aerframe_budget_geofence.py --help
 ```
+
+(Note: Windows users can use the `activate.bat` script instead of the `source` command: `venv\Scripts\activate.bat`)
 
 When you are done, you can deactivate the virtual environment by running the `deactivate` command.
