@@ -62,7 +62,6 @@ def default_from_context(default_name, default_value=' '):
 def mycli(ctx, verbose, config_file):
     ctx.obj['verbose'] = verbose
     print('context:\n' + str(ctx.invoked_subcommand))
-    print('all dat context: ' + str(ctx.obj))
     if load_config(ctx, config_file):
         aerisutils.vprint(verbose, 'Valid config for account ID: ' + ctx.obj['accountId'])
     elif ctx.invoked_subcommand not in ['config',
