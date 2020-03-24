@@ -134,7 +134,7 @@ This project used pycodestyle to ensure adherence to PEP 8 coding style rules.
 Running pycodestyle as below should return with no errors.
 
 ```
-$ pycodestyle --max-line-length=120 aerisapisdk/ tests/
+$ poetry run pycodestyle --max-line-length=120 aerisapisdk/ tests/
 ```
 
 ### Integration tests
