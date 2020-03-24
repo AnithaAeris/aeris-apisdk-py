@@ -62,6 +62,7 @@ def default_from_context(default_name, default_value=' '):
 def mycli(ctx, verbose, config_file):
     ctx.obj['verbose'] = verbose
     print('context:\n' + str(ctx.invoked_subcommand))
+    print('all dat context: ' + str(ctx.obj))
     if load_config(ctx, config_file):
         aerisutils.vprint(verbose, 'Valid config for account ID: ' + ctx.obj['accountId'])
     elif ctx.invoked_subcommand not in ['config',
@@ -139,7 +140,8 @@ def _set_config_file_permissions(filename):
         # "The SYSTEM account's permissions can be removed from a file, but we do not recommend removing them."
         dacl_to_set.AddAccessAllowedAce(win32security.ACL_REVISION, con.FILE_ALL_ACCESS, system_user)
         # The current user is the only normal user that should have access:
-        dacl_to_set.AddAccessAllowedAce(win32security.ACL_REVISION, con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
+        dacl_to_set.AddAccessAllowedAce(win32security.ACL_REVISION,
+                                        con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
         security_descriptor.SetSecurityDescriptorDacl(1, dacl_to_set, 0)
         win32security.SetFileSecurity(filename, win32security.DACL_SECURITY_INFORMATION, security_descriptor)
     else:
