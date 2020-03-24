@@ -24,6 +24,7 @@ click = "^7.0"
 requests = "^2.22"
 pathlib = "^1.0.1"
 pycodestyle = "^2.5.0"
+pywin32 = {version = "^227", platform = "win32"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
