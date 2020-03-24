@@ -114,14 +114,17 @@ This project uses pytest for running functional tests
 
 ```
 $ poetry run pytest
-================================================= test session starts ==================================================
+============================= test session starts ==============================
 platform linux -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1
 rootdir: ~/aeris-apisdk-py
-collected 1 item
+collected 54 items                                                             
 
-tests/test_aerisapisdk.py .                                                                                      [100%]
+tests/test_aeradminsdk.py ......                                         [ 11%]
+tests/test_aerframesdk.py .............................................. [ 96%]
+.                                                                        [ 98%]
+tests/test_aerisapisdk.py .                                              [100%]
 
-================================================== 1 passed in 0.04s ===================================================
+============================== 54 passed in 0.41s ==============================
 ```
 
 ### Coding style tests
@@ -153,7 +156,7 @@ This section covers release activities.
 ### Changelog
 
 Make sure there is an entry in the [CHANGELOG](https://github.com/aeristhings/aeris-apisdk-py/blob/master/CHANGELOG.md) for the version you will release.
-Included should be the git tag for the release, new features added, and bugs fixed. 
+Included should be the git tag for the release, new features added, and bugs fixed. If relevant, it should also include notes about upgrade and security issues.
 
 ### Updating the Version Number
 Before you build and publish, you will need to make sure that the version is changed so that users can easily pick up the latest version.
@@ -198,12 +201,12 @@ Password:
 Finally, tag the master branch with the version and push that tag.
 
 
-### Testing Publishing
+### Testing the Publishing Process
 test.pypi.org is a test version of pypi.org. Once you have built the package (see "Building," above), you can use these instructions to test the release process. This is useful for testing PyPI's display of project metadata, such as the classifiers.
 
 1. Create an account on https://test.pypi.org/
 2. Verify your email address
-3. Add the test repository (named "test" in these examples):
+3. Add the test repository (named "test" in these examples) to Poetry:
     1. `$ poetry config repositories.test https://test.pypi.org/legacy/`
 4. Configure credentials for the test repository:
     1. `$ poetry config http-basic.test your_test.pypi.org_username your_test.pypi.org_password`
