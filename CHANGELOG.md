@@ -12,6 +12,7 @@ New features or changes:
 * updates the names of some methods to more closely align with their function
     * example: `get_outbound_subscription` to `get_outbound_subscription_id_by_app_short_name`
 * adds CONTRIBUTING.md
+* the 'aeriscli aerframe sms send' command now takes an IMSI and message as options
 
 Bug fixes:
 * miscellaneous typos
