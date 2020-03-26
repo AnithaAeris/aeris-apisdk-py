@@ -19,6 +19,6 @@ $ pip3 install aerisapisdk
 $ python3 aerframe_budget_geofence.py --help
 ```
 
-(Note: Windows users can use the `activate.bat` script instead of the `source` command: `venv\Scripts\activate.bat`)
+(Note: Windows users can run the `activate.bat` or `Activate.ps1` script instead of the `source` command. Those scripts are found inside `venv\Scripts\`)
 
 When you are done, you can deactivate the virtual environment by running the `deactivate` command.

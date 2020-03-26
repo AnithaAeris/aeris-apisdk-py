@@ -104,7 +104,49 @@ def config(ctx, accountid, apikey, email, deviceidtype, deviceid):
                      "primaryDeviceIdType": deviceidtype,
                      "primaryDeviceId": deviceid}
     with open(default_config_filename, 'w') as myconfigfile:
+        try:
+            _set_config_file_permissions(default_config_filename)
+        except BaseException as e:
+            print(f'WARNING: Could not set permissions for file {default_config_filename}. Reason: {e}')
+            print('WARNING: You should ensure that the permissions of the file keep your API key secret.')
         json.dump(config_values, myconfigfile, indent=4)
+
+
+def _set_config_file_permissions(filename):
+    """
+    Sets the permissions of the configuration file such that only the current user can read or write the file.
+
+    Parameters
+    ----------
+    filename: str
+
+    Returns
+    -------
+    None
+    """
+    import platform
+    if platform.system() == 'Windows':
+        # hat tip to http://timgolden.me.uk/python/win32_how_do_i/add-security-to-a-file.html
+        import win32security
+        import win32api
+        import ntsecuritycon as con
+        user, domain, type = win32security.LookupAccountName("", win32api.GetUserName())
+        system_user, domain, type = win32security.LookupAccountName("", 'SYSTEM')
+        security_descriptor = win32security.GetFileSecurity(filename, win32security.DACL_SECURITY_INFORMATION)
+        dacl_to_set = win32security.ACL()
+        # ensure that SYSTEM still has full access --
+        # https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/local-accounts says
+        # "The SYSTEM account's permissions can be removed from a file, but we do not recommend removing them."
+        dacl_to_set.AddAccessAllowedAce(win32security.ACL_REVISION, con.FILE_ALL_ACCESS, system_user)
+        # The current user is the only normal user that should have access:
+        dacl_to_set.AddAccessAllowedAce(win32security.ACL_REVISION,
+                                        con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
+        security_descriptor.SetSecurityDescriptorDacl(1, dacl_to_set, 0)
+        win32security.SetFileSecurity(filename, win32security.DACL_SECURITY_INFORMATION, security_descriptor)
+    else:
+        import os
+        import stat
+        os.chmod(filename, stat.S_IRUSR | stat.S_IWUSR)
 
 
 # ========================================================================
