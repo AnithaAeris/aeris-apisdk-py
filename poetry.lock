@@ -131,7 +131,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.8.1"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Python style guide checker"
 name = "pycodestyle"
 optional = false
@@ -257,7 +257,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "5c8bd34293529eb6b22c9e8ec37a5153e6c8fd944c676db062e44b76037e60cf"
+content-hash = "73a86cb90107ceb6b4ff3f3d6e065684719002667879a98542e0f350f198f418"
 python-versions = "^3.6.9"
 
 [metadata.files]
