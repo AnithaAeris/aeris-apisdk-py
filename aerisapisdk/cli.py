@@ -49,6 +49,31 @@ def default_from_context(default_name, default_value=' '):
     return OptionDefaultFromContext
 
 
+def default_option_from_context_hierarchy(default_value=None, *names):
+    """Allows us to set a default option value based on some path into the context.
+
+    Parameters
+    ----------
+    default_value
+        The default value to return if no suitable value is found in the context
+    names: list
+        The keys to look up in the context for the default value
+
+    Returns
+    -------
+    The default option value.
+    """
+    class OptionDefaultFromContext(click.Option):
+        def get_default(self, ctx):
+            try:
+                current_value = ctx.obj[names[0]]
+                for name in names[1:]:
+                    current_value = current_value[name]
+                self.default = current_value
+            except KeyError:
+                self.default = default_value
+            return super(OptionDefaultFromContext, self).get_default(ctx)
+    return OptionDefaultFromContext
 #
 #
 # Define the main highest-level group of commands
@@ -453,14 +478,20 @@ def sms(ctx):
 
 
 @sms.command()  # Subcommand: aerframe sms send
+@click.argument('message', default='Test from aerframesdk.')
+@click.option('--imsi', 'imsi', cls=default_option_from_context_hierarchy('', 'deviceId', 'imsi'),
+              required=False,
+              help='The IMSI of the device to send the SMS. The default is the device used for the "config"'
+              + ' and "aerframe init" commands.')
 @click.pass_context
-def send(ctx):
-    """Send an SMS
-    \f
+def send(ctx, message, imsi):
+    """Send MESSAGE as the payload of an SMS to a device.
 
+    If omitted, MESSAGE will be "Test from aerframesdk.".
+    \f
     """
     aerframesdk.send_mt_sms(ctx.obj['accountId'], ctx.obj['aerframeApplication']['apiKey'], afsdkappname,
-                            ctx.obj['deviceId']['imsi'], 'Test from aerframesdk.', ctx.obj['verbose'])
+                            imsi, message, ctx.obj['verbose'])
 
 
 @sms.command()  # Subcommand: aerframe sms receive
