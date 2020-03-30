@@ -43,7 +43,7 @@ def ping(verbose):
 
 
 def get_device_details(accountId, apiKey, email, deviceIdType, deviceId, verbose=False):
-    """Gets details for a device.
+    """Gets and prints details for a device.
     Parameters
     ----------
     accountId: str
@@ -80,7 +80,7 @@ def get_device_details(accountId, apiKey, email, deviceIdType, deviceId, verbose
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if r.status_code == 200:
         device_details = json.loads(r.text)
-        aerisutils.vprint(verbose, 'Device details:\n' + json.dumps(device_details, indent=4))
+        print('Device details:\n' + json.dumps(device_details, indent=4))
         result_code = None
         if 'resultCode' in device_details:
             result_code = device_details['resultCode']
@@ -94,7 +94,7 @@ def get_device_details(accountId, apiKey, email, deviceIdType, deviceId, verbose
 
 
 def get_device_network_details(accountId, apiKey, email, deviceIdType, deviceId, verbose=False):
-    """Gets details about a device's network attributes (e.g., last registration time)
+    """Gets and prints details about a device's network attributes (e.g., last registration time)
     Parameters
     ----------
     accountId: str
