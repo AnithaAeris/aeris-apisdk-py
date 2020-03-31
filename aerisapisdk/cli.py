@@ -226,9 +226,9 @@ def aertraffic(ctx):
 @aertraffic.command()  # Subcommand: aertraffic devicesummaryreport
 @click.pass_context
 def devicesummaryreport(ctx):
-    aertrafficsdk.get_device_summary_report(ctx.obj['accountId'], ctx.obj['apiKey'],
-                                            ctx.obj['email'], ctx.obj['primaryDeviceIdType'],
-                                            ctx.obj['primaryDeviceId'])
+    aertrafficsdk.get_device_summary_report(ctx.obj['accountId'], ctx.obj['apiKey'], ctx.obj['email'],
+                                            ctx.obj['primaryDeviceIdType'], ctx.obj['primaryDeviceId'],
+                                            ctx.obj['verbose'])
 
 
 # ========================================================================

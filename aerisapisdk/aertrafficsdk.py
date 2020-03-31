@@ -42,7 +42,7 @@ def ping(verbose=False):
         aerisutils.print_http_error(r)
 
 
-def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId):
+def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId, verbose=False):
     """Prints a device summary report.
 
     Parameters
@@ -52,6 +52,7 @@ def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId):
     email: str
     deviceIdType: str
     deviceId: str
+    verbose: bool
 
     Returns
     -------
@@ -60,8 +61,8 @@ def get_device_summary_report(accountId, apiKey, email, deviceIdType, deviceId):
     endpoint = get_endpoint() + accountId
     endpoint = endpoint + '/systemReports/deviceSummary'
     myparams = {'apiKey': apiKey, "durationInMonths": '3', 'subAccounts': 'false'}
-    print("Endpoint: " + endpoint)
-    print("Params: " + str(myparams))
+    aerisutils.vprint(verbose, "Endpoint: " + endpoint)
+    aerisutils.vprint(verbose, "Params: " + str(myparams))
     r = requests.get(endpoint, params=myparams)
-    print("Response code: " + str(r.status_code))
+    aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     print(r.text)

@@ -122,7 +122,7 @@ def get_device_network_details(accountId, apiKey, email, deviceIdType, deviceId,
                "apiKey": apiKey,
                "email": email,
                deviceIdType: deviceId}
-    print("Payload: " + str(payload))
+    aerisutils.vprint(verbose, "Payload: " + str(payload))
     r = requests.get(endpoint, params=payload)
     aerisutils.vprint(verbose, "Response code: " + str(r.status_code))
     if r.status_code == 200:
