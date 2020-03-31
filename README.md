@@ -200,6 +200,8 @@ Password:
 ### Tagging
 Finally, tag the master branch with the version and push that tag.
 
+Use the format `v(major).(minor).(patch)` for the tag. Example: for release 0.1.5, the tag would be "v0.1.5"
+
 
 ### Testing the Publishing Process
 test.pypi.org is a test version of pypi.org. Once you have built the package (see "Building," above), you can use these instructions to test the release process. This is useful for testing PyPI's display of project metadata, such as the classifiers.
